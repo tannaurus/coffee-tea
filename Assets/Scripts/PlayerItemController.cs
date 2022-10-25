@@ -72,7 +72,9 @@ namespace StarterAssets {
         private Vector3? GetDropLocation() {
             RaycastHit hit;
             if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 15f)) {
-                    return hit.point;
+                    float placementOffset = hand.GetComponent<Item>().GetPlacementOffset();
+                    Debug.Log(placementOffset);
+                    return new Vector3(hit.point.x, hit.point.y + placementOffset, hit.point.z);
             }
             return null;
         }
