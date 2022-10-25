@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 namespace StarterAssets {
     public class PlayerItemController : MonoBehaviour
     {
-        public float playerReach = 15f;
+        public float playerReach = 8f;
         public float playerThrowForce = 400f;
 
 
@@ -14,6 +14,7 @@ namespace StarterAssets {
 
         private GameObject hand;
         private Rigidbody handRb;
+        private StarterAssetsInputs inputs;
 
         // Controllers to prevent behavior from occuring while other behaviors are occuring
         enum AnimationState {dropping, grabbing, nothing}
@@ -26,9 +27,8 @@ namespace StarterAssets {
 
         // Arbitrary placement for item when "in hand"
         private Vector3 handPosition = new Vector3(0.457f, 1.065f, 0.938f);
+        private Vector3 handRotation = new Vector3(0f, 0f, 0f);
 
-        private StarterAssetsInputs inputs;
-        // Start is called before the first frame update
         void Start()
         {
             inputs = GetComponent<StarterAssetsInputs>();
@@ -85,7 +85,6 @@ namespace StarterAssets {
             RaycastHit hit;
             if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, playerReach)) {
                     float placementOffset = hand.GetComponent<Item>().GetPlacementOffset();
-                    Debug.Log(placementOffset);
                     return new Vector3(hit.point.x, hit.point.y + placementOffset, hit.point.z);
             }
             return null;
@@ -120,14 +119,16 @@ namespace StarterAssets {
         }
 
         private void MoveItemToHand() {
-            if (hand.transform.localPosition == handPosition) {
+            if (elapsedAnimationFrames == animationFrameCount) {
                 animationState = AnimationState.nothing;
                 elapsedAnimationFrames = 0;
             } else {
                 float interpolationRatio = (float)elapsedAnimationFrames / animationFrameCount;
 
-                Vector3 interpolatedPosition = Vector3.Lerp(hand.transform.localPosition, handPosition, interpolationRatio);
-                hand.transform.localPosition = interpolatedPosition;
+                hand.transform.localPosition = Vector3.Lerp(hand.transform.localPosition, handPosition, interpolationRatio);
+
+                // it'd be nice to rotate this gradually
+                hand.transform.localEulerAngles = handRotation;
 
                 elapsedAnimationFrames = (elapsedAnimationFrames + 1) % (animationFrameCount + 1);
             }
