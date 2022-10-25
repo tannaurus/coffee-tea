@@ -51,7 +51,6 @@ namespace StarterAssets
 		[Tooltip("How far in degrees can you move the camera down")]
 		public float BottomClamp = -90.0f;
 
-		public Camera playerCamera;
 
 		// cinemachine
 		private float _cinemachineTargetPitch;
@@ -117,7 +116,6 @@ namespace StarterAssets
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
-			Interact();
 		}
 
 		private void LateUpdate()
@@ -151,25 +149,6 @@ namespace StarterAssets
 
 				// rotate the player left and right
 				transform.Rotate(Vector3.up * _rotationVelocity);
-			}
-		}
-
-		private void Interact() {
-			if (_input.pickup) {
-				Debug.Log("Interact!");
-
-				    RaycastHit hit;
-					if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 10f)) {
-						if (hit.transform.gameObject.tag == "Item") {
-							Debug.Log("Hit item!");
-							Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * 10f, Color.green);
-							hit.transform.SetParent(transform);
-						} else {
-							Debug.Log("Hit non-item");
-						}
-					}
-
-				_input.pickup = false;
 			}
 		}
 
