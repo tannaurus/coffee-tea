@@ -6,6 +6,10 @@ using UnityEngine.InputSystem;
 namespace StarterAssets {
     public class PlayerItemController : MonoBehaviour
     {
+        public float playerReach = 15f;
+        public float playerThrowForce = 400f;
+
+
 		public Camera playerCamera;
 
         private GameObject hand;
@@ -32,6 +36,7 @@ namespace StarterAssets {
 
         void FixedUpdate() {
             Interact();
+            Throw();
 
             if (animationState == AnimationState.dropping) {
                 MoveItemToDropPosition();
@@ -41,8 +46,8 @@ namespace StarterAssets {
         }
 
         private void Interact() {
-            if (inputs.pickup) {
-                inputs.pickup = false;
+            if (inputs.pickupItem) {
+                inputs.pickupItem = false;
 
                 if (animationState == AnimationState.nothing) {
                     if (hand) {
@@ -52,6 +57,18 @@ namespace StarterAssets {
                         Debug.Log("Grabbing item...");
                         GrabItem();
                     }
+                }
+            }
+        }
+
+        private void Throw() {
+            if (inputs.throwItem) {
+                inputs.throwItem = false;
+                Debug.Log("Throw!");
+                if (animationState == AnimationState.nothing && hand) {
+                    handRb.isKinematic = false;
+                    handRb.AddForce(playerCamera.transform.forward * playerThrowForce);
+                    ReleaseItem();
                 }
             }
         }
@@ -71,7 +88,7 @@ namespace StarterAssets {
         // If the player is looking at something, return the point in space where they are looking
         private Vector3? GetDropLocation() {
             RaycastHit hit;
-            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 15f)) {
+            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, playerReach)) {
                     float placementOffset = hand.GetComponent<Item>().GetPlacementOffset();
                     Debug.Log(placementOffset);
                     return new Vector3(hit.point.x, hit.point.y + placementOffset, hit.point.z);
@@ -123,7 +140,7 @@ namespace StarterAssets {
 
         private void GrabItem() {
             RaycastHit hit;
-            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 15f)) {
+            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, playerReach)) {
                 if (hit.transform.gameObject.tag == "Item") {
                     hand = hit.transform.gameObject;
                     handRb = hand.GetComponent<Rigidbody>();
