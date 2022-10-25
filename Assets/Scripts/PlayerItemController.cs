@@ -35,6 +35,8 @@ namespace StarterAssets {
 
             if (animationState == AnimationState.dropping) {
                 MoveItemToDropPosition();
+            } else if (animationState == AnimationState.grabbing) {
+                MoveItemToHand();
             }
         }
 
@@ -42,11 +44,12 @@ namespace StarterAssets {
             if (inputs.pickup) {
                 inputs.pickup = false;
 
-                Debug.Log("Interacting");
                 if (animationState == AnimationState.nothing) {
                     if (hand) {
+                        Debug.Log("Dropping item...");
                         DropItemInHand();
                     } else {
+                        Debug.Log("Grabbing item...");
                         GrabItem();
                     }
                 }
@@ -56,18 +59,19 @@ namespace StarterAssets {
         private void DropItemInHand() {
             Vector3? dropLocation = GetDropLocation();
             if (dropLocation != null) {
+                Debug.Log("Setting drop position...");
                 itemPlacementPosition = (Vector3)dropLocation;
+                animationState = AnimationState.dropping;
             } else {
+                Debug.Log("No drop position found...");
                 DropItemOnGround();
             }
-            
-            animationState = AnimationState.dropping;
         }
 
         // If the player is looking at something, return the point in space where they are looking
         private Vector3? GetDropLocation() {
             RaycastHit hit;
-            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 10f)) {
+            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 15f)) {
                     return hit.point;
             }
             return null;
@@ -76,12 +80,15 @@ namespace StarterAssets {
         private void MoveItemToDropPosition() {
             if (hand.transform.position == itemPlacementPosition) {
                 animationState = AnimationState.nothing;
+                itemPlacementPosition = Vector3.zero;
+                elapsedAnimationFrames = 0;
                 
                 ReleaseItem();
             } else {
                 float interpolationRatio = (float)elapsedAnimationFrames / animationFrameCount;
 
                 Vector3 interpolatedPosition = Vector3.Lerp(hand.transform.position, itemPlacementPosition, interpolationRatio);
+                hand.transform.position = interpolatedPosition;
 
                 elapsedAnimationFrames = (elapsedAnimationFrames + 1) % (animationFrameCount + 1);
             }
@@ -98,15 +105,29 @@ namespace StarterAssets {
             handRb = null;
         }
 
+        private void MoveItemToHand() {
+            if (hand.transform.localPosition == handPosition) {
+                animationState = AnimationState.nothing;
+                elapsedAnimationFrames = 0;
+            } else {
+                float interpolationRatio = (float)elapsedAnimationFrames / animationFrameCount;
+
+                Vector3 interpolatedPosition = Vector3.Lerp(hand.transform.localPosition, handPosition, interpolationRatio);
+                hand.transform.localPosition = interpolatedPosition;
+
+                elapsedAnimationFrames = (elapsedAnimationFrames + 1) % (animationFrameCount + 1);
+            }
+        }
+
         private void GrabItem() {
             RaycastHit hit;
-            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 10f)) {
+            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 15f)) {
                 if (hit.transform.gameObject.tag == "Item") {
                     hand = hit.transform.gameObject;
                     handRb = hand.GetComponent<Rigidbody>();
                     handRb.isKinematic = true;
                     hand.transform.SetParent(transform, true);
-                    hand.transform.localPosition = handPosition;
+                    animationState = AnimationState.grabbing;
                 }
             }
         }
