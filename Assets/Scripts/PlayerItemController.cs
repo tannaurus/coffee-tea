@@ -51,10 +51,8 @@ namespace StarterAssets {
 
                 if (animationState == AnimationState.nothing) {
                     if (hand) {
-                        Debug.Log("Dropping item...");
                         DropItemInHand();
                     } else {
-                        Debug.Log("Grabbing item...");
                         GrabItem();
                     }
                 }
@@ -64,7 +62,6 @@ namespace StarterAssets {
         private void Throw() {
             if (inputs.throwItem) {
                 inputs.throwItem = false;
-                Debug.Log("Throw!");
                 if (animationState == AnimationState.nothing && hand) {
                     handRb.isKinematic = false;
                     handRb.AddForce(playerCamera.transform.forward * playerThrowForce);
@@ -76,11 +73,9 @@ namespace StarterAssets {
         private void DropItemInHand() {
             Vector3? dropLocation = GetDropLocation();
             if (dropLocation != null) {
-                Debug.Log("Setting drop position...");
                 itemPlacementPosition = (Vector3)dropLocation;
                 animationState = AnimationState.dropping;
             } else {
-                Debug.Log("No drop position found...");
                 DropItemOnGround();
             }
         }
