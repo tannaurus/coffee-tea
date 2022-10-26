@@ -4,20 +4,10 @@ using UnityEngine;
 
 public class Glass : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter(Collider collider) {
-        Debug.Log("Destroy");
         Destroy(gameObject);
+        Rigidbody rb = collider.attachedRigidbody;
+        // spin on glass break
+        rb.AddTorque(Vector3.right * 8);
     }
 }
