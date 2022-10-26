@@ -14,7 +14,8 @@ public class Drink : MonoBehaviour
 
     void OnCollisionEnter(Collision collision) {
         if (!spilt && collision.relativeVelocity.magnitude > 2) {
-            Vector3 hitPoint = collision.GetContact(0).point;
+            BoxCollider collidedCollider = collision.gameObject.GetComponent<BoxCollider>();
+            Vector3 hitPoint = collidedCollider.ClosestPointOnBounds(transform.position);
             Instantiate(spill, hitPoint, Quaternion.identity);
             spilt = true;
             Destroy(drink);
