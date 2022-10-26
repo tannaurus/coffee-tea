@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ItemType {Standard, Rag}
+
 public class Item : MonoBehaviour
 {
     // Reference to the child of the Item that is considered the main GameObject/Mesh of the item rendered for the player
     // Mostly used to calculate the height of the mesh so the placement offset is correct
     public GameObject mainItem;
+
+    public ItemType type = ItemType.Standard; 
 
     // calculated by the PlayerItemController when first picked up
     // and set here for future reference

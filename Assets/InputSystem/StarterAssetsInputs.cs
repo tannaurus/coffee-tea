@@ -14,6 +14,7 @@ namespace StarterAssets
 		public bool sprint;
 		public bool pickupItem;
 		public bool throwItem;
+		public bool useItem;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -53,6 +54,10 @@ namespace StarterAssets
 		public void OnThrow(InputValue value) {
 			ThrowInput(value.isPressed);
 		}
+
+		public void OnUse(InputValue value) {
+			UseInput(value.isPressed);
+		}
 #endif
 
 
@@ -82,6 +87,10 @@ namespace StarterAssets
 
 		public void ThrowInput(bool newThrowState) {
 			throwItem = newThrowState;
+		}
+
+		public void UseInput(bool newUseState) {
+			useItem = newUseState;
 		}
 		
 		private void OnApplicationFocus(bool hasFocus)
