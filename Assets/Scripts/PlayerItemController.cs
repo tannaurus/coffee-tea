@@ -12,10 +12,12 @@ public class PlayerItemController : MonoBehaviour
 
     public Camera playerCamera;
 
-    public GameObject hand;
     public Item item;
+    public GameObject hand;
     public Rigidbody handRb;
     public StarterAssets.StarterAssetsInputs inputs;
+
+    private PlayerRagController ragController;
 
     // Controllers to prevent behavior from occuring while other behaviors are occuring
     enum AnimationState {Dropping, Grabbing, Nothing}
@@ -33,6 +35,7 @@ public class PlayerItemController : MonoBehaviour
     void Start()
     {
         inputs = GetComponent<StarterAssets.StarterAssetsInputs>();
+        ragController = GetComponent<PlayerRagController>();
     }
 
     void FixedUpdate() {
@@ -47,7 +50,7 @@ public class PlayerItemController : MonoBehaviour
     }
 
     public bool HoldingItem() {
-        return animationState == AnimationState.Nothing && hand;
+        return animationState == AnimationState.Nothing && hand && item;
     }
 
     private void Interact() {
@@ -120,6 +123,12 @@ public class PlayerItemController : MonoBehaviour
         hand = null;
         handRb.isKinematic = false;
         handRb = null;
+
+        if (item.type == ItemType.Rag) {
+            ragController.rag = null;
+        }
+
+        item = null;
     }
 
     private void MoveItemToHand() {

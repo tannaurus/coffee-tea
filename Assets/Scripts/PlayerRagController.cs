@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class PlayerRagController : MonoBehaviour
 {
+    public Rag rag;
+
     private PlayerItemController itemController;
-    private Rag rag;
+
+    private Vector3? onRagUsePlayerPosition;
+    private Vector3? ragUsePosition;
 
     // Start is called before the first frame update
     void Start()
@@ -16,19 +20,48 @@ public class PlayerRagController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (itemController.inputs.useItem) {
-            itemController.inputs.useItem = false;
-            UseRag();
+        if (itemController.inputs.interact && HoldingRag()) {
+            itemController.inputs.interact = false;
+            ToggleRagFold();
+        }
+
+        if (itemController.inputs.use && HoldingRag()) {
+            // itemController.inputs.use = false;
+
+            Debug.Log("Using rag...");
         }
     }
 
-    private void UseRag() {
-        if (itemController.HoldingItem() && itemController.item.type == ItemType.Rag) {
-            if (!rag) {
-                rag = itemController.item.GetComponent<Rag>();
-            }
+    private bool HoldingRag() {
+        return itemController.HoldingItem() && itemController.item.type == ItemType.Rag;
+    }
 
-            rag.ToggleRag();
+    private void ToggleRagFold() {
+        if (!rag) {
+            rag = itemController.item.GetComponent<Rag>();
         }
+
+        rag.ToggleRag();
+    }
+
+    private void StartUsingRag() {
+        onRagUsePlayerPosition = transform.position;
+        ragUsePosition = GetRagUseLocation();
+
+    }
+
+    private void StopUsingRag() {
+        onRagUsePlayerPosition = null;
+        ragUsePosition = null;
+    }
+
+    private Vector3? GetRagUseLocation() {
+        RaycastHit hit;
+        if (Physics.Raycast(itemController.playerCamera.transform.position, itemController.playerCamera.transform.forward, out hit, itemController.playerReach)) {
+            if (hit.transform.gameObject.tag == "Mess") {
+                return hit.transform.position;
+            }
+        }
+        return null;
     }
 }

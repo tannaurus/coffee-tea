@@ -60,12 +60,21 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Use",
+                    "name": "Interact",
                     "type": "Button",
                     "id": "d6e351ab-8cd1-4b2a-beef-dcd2e50315be",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Use",
+                    "type": "Button",
+                    "id": "4ae566af-a665-4b64-bf41-fb472d908b70",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold",
                     "initialStateCheck": false
                 }
             ],
@@ -272,6 +281,17 @@
                     "name": "",
                     "id": "6822026c-e8e2-4314-8ade-2ae71f1771de",
                     "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7f213d6e-b5da-42f4-8b06-96c9344920a0",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

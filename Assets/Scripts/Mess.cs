@@ -10,6 +10,8 @@ public class Mess : MonoBehaviour
     private Color dirtyMessColor;
     private Color cleanedMessColor;
 
+    private float messiness = 1f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +24,12 @@ public class Mess : MonoBehaviour
     }
 
     public void CleanMess(float ragStrength) {
-        messRenderer.material.color = Color.Lerp(dirtyMessColor, cleanedMessColor, 1f / ragStrength * Time.deltaTime);
+        if (messiness != 0f) {
+            messiness -= 1f / ragStrength * Time.deltaTime;
+            messiness = Mathf.Clamp(messiness, 0, 1);
+            mess.transform.localScale = new Vector3(messiness, mess.transform.localScale.y, messiness);
+            messRenderer.material.color = Color.Lerp(cleanedMessColor, dirtyMessColor, messiness);
+            Debug.Log("Cleaning mess...");
+        }
     }
 }
