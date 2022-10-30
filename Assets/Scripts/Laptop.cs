@@ -5,6 +5,7 @@ using UnityEngine;
 public class Laptop : MonoBehaviour
 {
     public GameObject smoke;
+    public GameObject brokenLaptop;
 
     public GameObject workingScreen;
     public GameObject brokenScreen;
@@ -21,9 +22,10 @@ public class Laptop : MonoBehaviour
     void Start()
     {
         smoke.SetActive(false);
-        workingScreen.SetActive(true);
+        
         brokenScreen.SetActive(false);
         deadScreen.SetActive(false);
+        workingScreen.SetActive(true);
     }
 
     void Update() {
@@ -105,5 +107,7 @@ public class Laptop : MonoBehaviour
         workingScreen.SetActive(false);
         brokenScreen.SetActive(false);
         deadScreen.SetActive(true);
+        Destroy(gameObject);
+        Instantiate(brokenLaptop);
     }
 }
