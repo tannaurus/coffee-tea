@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Laptop : MonoBehaviour
 {
-    public bool damaged = false;
-
     public GameObject smoke;
+
+    private bool damaged = false;
 
     // Start is called before the first frame update
     void Start()
@@ -14,11 +14,34 @@ public class Laptop : MonoBehaviour
         smoke.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (damaged && !smoke.activeSelf) {
-            smoke.SetActive(true);
+    public void Smoke() {
+        if (damaged) {
+            return;
+        }
+
+        smoke.SetActive(true);
+        damaged = true;
+    }
+
+
+    void OnTriggerEnter(Collider collider){
+        Debug.Log(collider.tag);
+        if (collider.gameObject.tag == "Item") {
+            Item item = collider.gameObject.GetComponent<Item>();
+            if (item.type == ItemType.Drink) {
+                Drink drink = collider.gameObject.GetComponent<Drink>();
+                drink.laptop = gameObject.GetComponent<Laptop>();
+            }
+        }
+    }
+
+    void OnTriggerExit(Collider collider) {
+        if (collider.gameObject.tag == "Item") {
+            Item item = collider.gameObject.GetComponent<Item>();
+            if (item.type == ItemType.Drink) {
+                Drink drink = collider.gameObject.GetComponent<Drink>();
+                drink.laptop = gameObject.GetComponent<Laptop>();
+            }
         }
     }
 }

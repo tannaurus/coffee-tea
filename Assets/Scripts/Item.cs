@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemType {Standard, Rag}
+public enum ItemType {Standard, Drink, Rag}
 
 public class Item : MonoBehaviour
 {

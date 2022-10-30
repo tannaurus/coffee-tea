@@ -177,7 +177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainItem: {fileID: 3568181543747772240}
-  type: 0
+  type: 1
   placementOffset: 0
 --- !u!114 &740651804134705727
 MonoBehaviour:
@@ -193,6 +193,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drink: {fileID: 3567205453797268028}
   spill: {fileID: 6347160081848629805, guid: f17dc96f01073457893fd2d2505e793a, type: 3}
+  laptop: {fileID: 0}
 --- !u!1 &3568181543747772240
 GameObject:
   m_ObjectHideFlags: 0

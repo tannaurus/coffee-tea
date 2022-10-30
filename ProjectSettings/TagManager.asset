@@ -8,6 +8,7 @@ TagManager:
   - Fluid
   - Item
   - Mess
+  - Laptop
   layers:
   - Default
   - TransparentFX

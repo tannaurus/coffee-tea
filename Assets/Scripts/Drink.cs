@@ -9,8 +9,17 @@ public class Drink : MonoBehaviour
     // should reference spill object created on impact
     public GameObject spill;
 
+    // when a laptop detects a drink near itself, it will set this value and remove it when the drink leaves it's trigger space
+    public Laptop laptop;
+
     private bool spilt = false;
-    
+
+
+    void Update() {
+        if (spilt && laptop) {
+            laptop.Smoke();
+        }   
+    }
 
     void OnCollisionEnter(Collision collision) {
         if (!spilt && collision.relativeVelocity.magnitude > 2) {
@@ -21,6 +30,5 @@ public class Drink : MonoBehaviour
             Destroy(drink);
         }
     }
-
 
 }
