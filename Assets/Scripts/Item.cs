@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemType {Standard, Drink, Rag}
+public enum ItemType {Standard, Drink, Rag, Extinguisher}
+public enum ItemHoldPosition {Steady, WithVision}
 
 public class Item : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class Item : MonoBehaviour
     public GameObject mainItem;
 
     public ItemType type = ItemType.Standard; 
+
+    public ItemHoldPosition holdPosition = ItemHoldPosition.Steady;
 
     // calculated by the PlayerItemController when first picked up
     // and set here for future reference

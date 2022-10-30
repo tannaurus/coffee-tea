@@ -11,6 +11,7 @@ public class PlayerItemController : MonoBehaviour
 
 
     public Camera playerCamera;
+    public GameObject cameraRoot;
 
     public Item item;
     public GameObject hand;
@@ -18,6 +19,7 @@ public class PlayerItemController : MonoBehaviour
     public StarterAssets.StarterAssetsInputs inputs;
 
     private PlayerRagController ragController;
+    private PlayerExtinguisherController extinguisherController;
 
     // Controllers to prevent behavior from occuring while other behaviors are occuring
     enum AnimationState {Dropping, Grabbing, Nothing}
@@ -29,13 +31,18 @@ public class PlayerItemController : MonoBehaviour
     private Vector3 itemPlacementPosition;
 
     // Arbitrary placement for item when "in hand"
-    private Vector3 handPosition = new Vector3(0.457f, 1.065f, 0.938f);
-    private Vector3 handRotation = new Vector3(0f, 0f, 0f);
+    private Vector3 handPositionSteady = new Vector3(0.457f, 1.065f, 0.938f);
+    private Vector3 handRotationSteady = new Vector3(0f, 0f, 0f);
+
+
+    private Vector3 handPositionWithVision = new Vector3(0.470999986f,-0.200000003f, 1.005f);
+    private Vector3 handRotationWithVision = new Vector3(359.947998f, 345f, 359.519989f);
 
     void Start()
     {
         inputs = GetComponent<StarterAssets.StarterAssetsInputs>();
         ragController = GetComponent<PlayerRagController>();
+        extinguisherController = GetComponent<PlayerExtinguisherController>();
     }
 
     void FixedUpdate() {
@@ -127,6 +134,9 @@ public class PlayerItemController : MonoBehaviour
         if (item.type == ItemType.Rag) {
             ragController.rag = null;
         }
+        if (item.type == ItemType.Extinguisher) {
+            extinguisherController.extinguisher = null;
+        }
 
         item = null;
     }
@@ -138,10 +148,17 @@ public class PlayerItemController : MonoBehaviour
         } else {
             float interpolationRatio = (float)elapsedAnimationFrames / animationFrameCount;
 
-            hand.transform.localPosition = Vector3.Lerp(hand.transform.localPosition, handPosition, interpolationRatio);
+            if (item.holdPosition == ItemHoldPosition.Steady) {
+                hand.transform.localPosition = Vector3.Lerp(hand.transform.localPosition, handPositionSteady, interpolationRatio);
+                // it'd be nice to rotate this gradually
+                hand.transform.localEulerAngles = handRotationSteady;
+            }
 
-            // it'd be nice to rotate this gradually
-            hand.transform.localEulerAngles = handRotation;
+            if (item.holdPosition == ItemHoldPosition.WithVision) {
+                hand.transform.localPosition = Vector3.Lerp(hand.transform.localPosition, handPositionWithVision, interpolationRatio);
+                // it'd be nice to rotate this gradually
+                hand.transform.localEulerAngles = handRotationWithVision;
+            }
 
             elapsedAnimationFrames = (elapsedAnimationFrames + 1) % (animationFrameCount + 1);
         }
@@ -156,7 +173,12 @@ public class PlayerItemController : MonoBehaviour
                 handRb = hand.GetComponent<Rigidbody>();
 
                 handRb.isKinematic = true;
-                hand.transform.SetParent(transform, true);
+                if (item.holdPosition == ItemHoldPosition.Steady) {
+                    hand.transform.SetParent(transform, true);
+                }
+                if (item.holdPosition == ItemHoldPosition.WithVision) {
+                    hand.transform.SetParent(cameraRoot.transform, true);
+                }
 
                 animationState = AnimationState.Grabbing;
             }

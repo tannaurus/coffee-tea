@@ -8,7 +8,7 @@ public class Laptop : MonoBehaviour
 
     private float health = 100f;
 
-    private bool damaged = false;
+    private bool wet = false;
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +17,7 @@ public class Laptop : MonoBehaviour
     }
 
     void Update() {
-        if (damaged && health > 0f) {
+        if (wet && health > 0f) {
             TakeDamange();
         }
 
@@ -48,12 +48,12 @@ public class Laptop : MonoBehaviour
     }
 
     public void Smoke() {
-        if (damaged) {
+        if (wet) {
             return;
         }
 
         smoke.SetActive(true);
-        damaged = true;
+        wet = true;
     }
 
     private void TakeDamange() {
