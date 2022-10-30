@@ -9,6 +9,7 @@ TagManager:
   - Item
   - Mess
   - Laptop
+  - Extinguisher
   layers:
   - Default
   - TransparentFX

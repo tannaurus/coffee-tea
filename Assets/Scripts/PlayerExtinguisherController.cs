@@ -15,9 +15,13 @@ public class PlayerExtinguisherController : MonoBehaviour
     }
 
     void FixedUpdate() {
+        if (HoldingExtinguisher() && !extinguisher) {
+            extinguisher = itemController.item.GetComponent<Extinguisher>();
+        }
+
         if (itemController.inputs.use && HoldingExtinguisher()) {
             itemController.inputs.use = false;
-            Debug.Log("Use extinguisher...");
+            extinguisher.ToggleExtinguisher();
         }
     }
 

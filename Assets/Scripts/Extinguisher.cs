@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class Extinguisher : MonoBehaviour
 {
-    
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public ParticleSystem particles;
+
+    void Start() {
+        particles.Stop(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void ToggleExtinguisher() {
+        if (particles.isEmitting) {
+            particles.Stop();
+        } else {
+            particles.Play();
+        }
     }
 }

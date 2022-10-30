@@ -20,6 +20,10 @@ public class PlayerRagController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (HoldingRag() && !rag) {
+            rag = itemController.item.GetComponent<Rag>();
+        }
+
         if (itemController.inputs.interact && HoldingRag()) {
             itemController.inputs.interact = false;
             ToggleRagFold();
@@ -37,10 +41,6 @@ public class PlayerRagController : MonoBehaviour
     }
 
     private void ToggleRagFold() {
-        if (!rag) {
-            rag = itemController.item.GetComponent<Rag>();
-        }
-
         rag.ToggleRag();
     }
 

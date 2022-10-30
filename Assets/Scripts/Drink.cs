@@ -17,7 +17,7 @@ public class Drink : MonoBehaviour
 
     void Update() {
         if (spilt && laptop) {
-            laptop.Smoke();
+            laptop.GetWet();
         }   
     }
 
