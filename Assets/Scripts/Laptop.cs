@@ -6,6 +6,8 @@ public class Laptop : MonoBehaviour
 {
     public GameObject smoke;
 
+    private float health = 100f;
+
     private bool damaged = false;
 
     // Start is called before the first frame update
@@ -14,15 +16,15 @@ public class Laptop : MonoBehaviour
         smoke.SetActive(false);
     }
 
-    public void Smoke() {
-        if (damaged) {
-            return;
+    void Update() {
+        if (damaged && health > 0f) {
+            TakeDamange();
         }
 
-        smoke.SetActive(true);
-        damaged = true;
+        if (health <= 0f) {
+            Break();
+        }
     }
-
 
     void OnTriggerEnter(Collider collider){
         Debug.Log(collider.tag);
@@ -44,4 +46,23 @@ public class Laptop : MonoBehaviour
             }
         }
     }
+
+    public void Smoke() {
+        if (damaged) {
+            return;
+        }
+
+        smoke.SetActive(true);
+        damaged = true;
+    }
+
+    private void TakeDamange() {
+        health -= 5f * Time.deltaTime;
+    }
+
+    private void Break() {
+        smoke.SetActive(false);
+    }
+
+
 }
