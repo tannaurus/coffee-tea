@@ -11,9 +11,8 @@ public class Laptop : MonoBehaviour
     public GameObject brokenScreen;
     public GameObject deadScreen;
 
-    private float health = 100f;
-
-    private float fireHealth = 100f;
+    public float health = 100f;
+    public float fireHealth = 100f;
 
     private bool wet = false; // got wet
     private bool onFire = false; // actively on fire
@@ -108,6 +107,7 @@ public class Laptop : MonoBehaviour
         brokenScreen.SetActive(false);
         deadScreen.SetActive(true);
         Destroy(gameObject);
-        Instantiate(brokenLaptop);
+        brokenLaptop = Instantiate(brokenLaptop);
+        brokenLaptop.transform.position = gameObject.transform.position;
     }
 }
