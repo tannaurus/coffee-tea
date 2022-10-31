@@ -161,6 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainItem: {fileID: 5200847276748698213}
   type: 1
+  holdPosition: 1
   placementOffset: 0
 --- !u!54 &6965924953301977455
 Rigidbody:
