@@ -8,8 +8,6 @@ public class PlayerRagController : MonoBehaviour
 
     private PlayerItemController itemController;
 
-    private Vector3? onRagUsePlayerPosition;
-    private Vector3? ragUsePosition;
 
     // Start is called before the first frame update
     void Start()
@@ -36,23 +34,21 @@ public class PlayerRagController : MonoBehaviour
         }
     }
 
+    public void PlayerMoved(Vector2 location) {
+        if (!itemController.ItemInHoldingPosition()) {
+            return;
+        }
+
+        Debug.Log("Player moved...");
+        itemController.animationState = PlayerItemController.AnimationState.Grabbing;
+    }
+
     private bool HoldingRag() {
         return itemController.HoldingItem() && itemController.item.type == ItemType.Rag;
     }
 
     private void ToggleRagFold() {
         rag.ToggleRag();
-    }
-
-    private void StartUsingRag() {
-        onRagUsePlayerPosition = transform.position;
-        ragUsePosition = GetRagUseLocation();
-
-    }
-
-    private void StopUsingRag() {
-        onRagUsePlayerPosition = null;
-        ragUsePosition = null;
     }
 
     private Vector3? GetRagUseLocation() {

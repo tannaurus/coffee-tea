@@ -71,6 +71,12 @@ public class Laptop : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter(Collision collision) {
+        if (!dead && collision.relativeVelocity.magnitude > 2) {
+            KillLaptop();
+        }
+    }
+
     public void GetWet() {
         if (wet) {
             return;
@@ -101,7 +107,7 @@ public class Laptop : MonoBehaviour
 
     private void KillLaptop() {
         smoke.SetActive(false);
-        dead = false;
+        dead = true;
         onFire = false;
         workingScreen.SetActive(false);
         brokenScreen.SetActive(false);

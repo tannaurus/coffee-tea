@@ -22,8 +22,8 @@ public class PlayerItemController : MonoBehaviour
     private PlayerExtinguisherController extinguisherController;
 
     // Controllers to prevent behavior from occuring while other behaviors are occuring
-    enum AnimationState {Dropping, Grabbing, Nothing}
-    private AnimationState animationState = AnimationState.Nothing;
+    public enum AnimationState {Dropping, Grabbing, Nothing}
+    public AnimationState animationState = AnimationState.Nothing;
 
     private int animationFrameCount = 45;
     private int elapsedAnimationFrames = 0;
@@ -58,6 +58,22 @@ public class PlayerItemController : MonoBehaviour
 
     public bool HoldingItem() {
         return animationState == AnimationState.Nothing && hand && item;
+    }
+
+    public bool ItemInHoldingPosition() {
+        if (!HoldingItem()) {
+            return false;
+        }
+
+        if (item.holdPosition == ItemHoldPosition.Steady) {
+            return hand.transform.position == handPositionSteady;
+        } 
+
+        if (item.holdPosition == ItemHoldPosition.WithVision) {
+            return hand.transform.position == handPositionWithVision;
+        }
+
+        return false;
     }
 
     private void Interact() {
